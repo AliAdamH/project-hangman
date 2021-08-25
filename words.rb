@@ -13,7 +13,7 @@ module Hangman
     end
 
     def hidden
-      @word.gsub(/[a-z]/, ' _ ')
+      @word.gsub(/[a-z]/, '_').split('')
     end
 
     def mapping

@@ -25,33 +25,26 @@ module Hangman
     def letter_to_index(player_letter)
       if @found_letters.include?(player_letter)
         puts "You've already guessed #{player_letter}"
-        return
       elsif @word_map.key?(player_letter)
         success(player_letter)
-        return @word_map[player_letter]
+        @word_map[player_letter]
       else
         failure(player_letter)
-        return
       end
     end
 
     def update_word(index)
-      w = @hidden_word.split
       if index.is_a?(Array)
         index.each do |i|
-          w[i] = @word_with_letters[i]
-          @hidden_word = w.join(' ')
+          @hidden_word[i] = @word_with_letters[i]
         end
       elsif index.is_a?(Numeric)
-        w[index] = @word_with_letters[index]
-        @hidden_word = w.join(' ')
-      else
-        return
+        @hidden_word[index] = @word_with_letters[index]
       end
     end
 
     def success(letter)
-      puts "You've found the letter #{letter}".green
+      puts "\nYou've found the letter #{letter}".green
       @found_letters << letter.green
       puts ''
     end
@@ -66,28 +59,32 @@ module Hangman
     def formatted_display
       puts "You have up to #{@attempts} wrong attempts "
       puts "Letters you've already guessed : #{@found_letters.join(' ')}" unless @found_letters.empty?
-      puts @hidden_word
+      puts @hidden_word.join(' ')
       2.times { puts '' }
+    end
+
+    def game_over?
+      if win?
+        puts "You've found the word : #{@word_with_letters}"
+        true
+      elsif @attempts.zero?
+        puts "You've lost the game"
+        puts "The word to guess was : #{@word_with_letters}"
+        true
+      end
     end
 
     def play
       puts 'Welcome to Hangman!'
       puts 'You have to guess the following word: '
-      while true
+      loop do
         formatted_display
         guess = get_letter
         # TODO : Get user choice of saving the game state.
         update_word(guess)
-        if win?
-          puts "You've found the word : #{@word_with_letters}"
-          break
-        elsif @attempts.zero?
-          puts "You've lost the game"
-          puts "The word to guess was : #{@word_with_letters}"
-          break
-        else
-          next
-        end
+        break if game_over?
+
+        next
       end
     end
   end
