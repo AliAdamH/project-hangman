@@ -18,7 +18,9 @@ module Hangman
       false
     end
 
-    def get_letter(player_letter = gets.chomp)
+    def get_letter(player_letter = gets.chomp.downcase)
+      return :game_saved if save?(player_letter)
+      return :invalid_input unless valid?(player_letter)
       letter_to_index(player_letter)
     end
 
@@ -74,13 +76,36 @@ module Hangman
       end
     end
 
+    def save?(input)
+      if input == 'save'
+        save_game
+        return true
+      end
+      false
+    end
+
+    def save_game
+      # save the game here
+      puts 'Game Saved ! See ya !'
+    end
+
+    def valid?(input)
+      return true if input.match(/[a-z]/) && input.length == 1
+
+      puts 'Invalid input !'
+      false
+    end
+
     def play
       puts 'Welcome to Hangman!'
       puts 'You have to guess the following word: '
       loop do
         formatted_display
         guess = get_letter
-        # TODO : Get user choice of saving the game state.
+        break if guess == :game_saved
+
+        next if guess == :invalid_input
+
         update_word(guess)
         break if game_over?
 
