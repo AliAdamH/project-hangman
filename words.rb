@@ -1,10 +1,13 @@
 module Hangman
   # Generates a word.
   class Words
-    attr_reader :word
+    attr_reader :word, :word_map
+    attr_accessor :hidden
 
     def initialize
       @word = random_word
+      @hidden = hide
+      @word_map = mapping
     end
 
     def random_word
@@ -12,7 +15,7 @@ module Hangman
       IO.readlines('better_dict.txt', chomp: true)[line].downcase
     end
 
-    def hidden
+    def hide
       @word.gsub(/[a-z]/, '_').split('')
     end
 
