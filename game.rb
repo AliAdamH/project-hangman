@@ -53,7 +53,7 @@ module Hangman
     end
 
     def failure(letter)
-      puts "#{letter} is a wrong guess !".red
+      puts "\n#{letter} is a wrong guess !".red
       @colored_letters << letter.red
       @letters_found << letter
       @attempts -= 1
@@ -63,17 +63,18 @@ module Hangman
     def formatted_display
       puts "You have up to #{@attempts} wrong attempts "
       puts "Letters you've already guessed : #{@colored_letters.join(' ')}" unless @colored_letters.empty?
+      puts "Guess the word ! Input a letter or type 'save' to save the game\n\n"
       puts @hidden_word.join(' ')
       2.times { puts '' }
     end
 
     def game_over?
       if win?
-        puts "You've found the word : #{@word_with_letters}"
+        puts "You've found the word : #{@word_with_letters}\n\n".green
         true
       elsif @attempts.zero?
-        puts "You've lost the game"
-        puts "The word to guess was : #{@word_with_letters}"
+        puts "You've lost the game\n\n"
+        puts "The word to guess was : #{@word_with_letters}\n\n".red
         true
       end
     end
@@ -99,12 +100,11 @@ module Hangman
     def valid?(input)
       return true if input.match(/[a-z]/) && input.length == 1
 
-      puts "Invalid input !\n\n"
+      puts "\nInvalid input !\n\n"
       false
     end
 
     def play
-      puts 'You have to guess the following word: '
       loop do
         formatted_display
         guess = get_letter
