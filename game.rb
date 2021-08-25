@@ -1,6 +1,3 @@
-require './words'
-require './core_exstensions'
-require 'yaml'
 module Hangman
   # Displays the game.
   class Game
@@ -10,7 +7,8 @@ module Hangman
       @hidden_word = @word.hidden
       @word_map = @word.mapping
       @attempts = 10
-      @found_letters = []
+      @letters_found = []
+      @colored_letters = []
     end
 
     def win?
@@ -22,12 +20,13 @@ module Hangman
     def get_letter(player_letter = gets.chomp.downcase)
       return :game_saved if save?(player_letter)
       return :invalid_input unless valid?(player_letter)
+
       letter_to_index(player_letter)
     end
 
     def letter_to_index(player_letter)
-      if @found_letters.include?(player_letter)
-        puts "You've already guessed #{player_letter}"
+      if @letters_found.include?(player_letter)
+        puts "\nYou've already guessed #{player_letter}\n".yellow
       elsif @word_map.key?(player_letter)
         success(player_letter)
         @word_map[player_letter]
@@ -48,20 +47,22 @@ module Hangman
 
     def success(letter)
       puts "\nYou've found the letter #{letter}".green
-      @found_letters << letter.green
+      @colored_letters << letter.green
+      @letters_found << letter
       puts ''
     end
 
     def failure(letter)
       puts "#{letter} is a wrong guess !".red
-      @found_letters << letter.red
+      @colored_letters << letter.red
+      @letters_found << letter
       @attempts -= 1
       puts ''
     end
 
     def formatted_display
       puts "You have up to #{@attempts} wrong attempts "
-      puts "Letters you've already guessed : #{@found_letters.join(' ')}" unless @found_letters.empty?
+      puts "Letters you've already guessed : #{@colored_letters.join(' ')}" unless @colored_letters.empty?
       puts @hidden_word.join(' ')
       2.times { puts '' }
     end
@@ -98,12 +99,11 @@ module Hangman
     def valid?(input)
       return true if input.match(/[a-z]/) && input.length == 1
 
-      puts 'Invalid input !'
+      puts "Invalid input !\n\n"
       false
     end
 
     def play
-      puts 'Welcome to Hangman!'
       puts 'You have to guess the following word: '
       loop do
         formatted_display
