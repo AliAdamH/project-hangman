@@ -1,5 +1,6 @@
 require './words'
 require './core_exstensions'
+require 'yaml'
 module Hangman
   # Displays the game.
   class Game
@@ -85,8 +86,13 @@ module Hangman
     end
 
     def save_game
-      # save the game here
+      File.open('save.yaml', 'w') { |f| f.puts YAML.dump(self) }
       puts 'Game Saved ! See ya !'
+    end
+
+    def self.load_game
+      file = File.open('save.yaml', 'r')
+      YAML.load(file)
     end
 
     def valid?(input)
@@ -114,6 +120,3 @@ module Hangman
     end
   end
 end
-
-g = Hangman::Game.new
-g.play
