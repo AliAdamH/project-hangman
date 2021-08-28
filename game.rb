@@ -36,11 +36,12 @@ module Hangman
     end
 
     def update_word(index)
-      if index.is_a?(Array)
+      case index
+      when Array
         index.each do |i|
           @hidden_word[i] = @word_with_letters[i]
         end
-      elsif index.is_a?(Numeric)
+      when Numeric
         @hidden_word[index] = @word_with_letters[index]
       end
     end
