@@ -5,9 +5,11 @@ require 'yaml'
 
 loop do 
 
-  puts "Welcome to the Hangman Game !\n"
-  puts "To play a new game enter: 1"
-  puts "To load the last saved game enter: 2"
+  puts <<~INTRO
+    Welcome to the Hangman Game !
+    To play a new game enter: 1
+    To load the last saved game enter: 2
+  INTRO
   starting_choice = gets.chomp
   if (starting_choice == "1")
     Hangman::Game.new.play
