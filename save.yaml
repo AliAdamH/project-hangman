@@ -16,7 +16,7 @@ word: !ruby/object:Hangman::Words
     o:
     - 1
     - 3
-    n: 2
+    "n": 2
     d: 4
     i: 5
     c: 6
@@ -29,7 +29,7 @@ word_map:
   o:
   - 1
   - 3
-  n: 2
+  "n": 2
   d: 4
   i: 5
   c: 6

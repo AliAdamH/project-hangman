@@ -94,8 +94,7 @@ module Hangman
     end
 
     def self.load_game
-      file = File.open('save.yaml', 'r')
-      YAML.load(file)
+      YAML.load_file('save.yaml', permitted_classes: [Hangman::Game, Hangman::Words], aliases: true)
     end
 
     def valid?(input)
