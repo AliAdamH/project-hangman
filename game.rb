@@ -107,6 +107,7 @@ module Hangman
 
     def play
       loop do
+        puts "\e[H\e[2J"
         formatted_display
         guess = get_letter
         break if guess == :game_saved
